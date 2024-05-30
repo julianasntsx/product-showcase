@@ -1,0 +1,9 @@
+.light {
+  /* Defina estilos para o tema claro */
+  @apply bg-white text-black;
+}
+
+.dark {
+  /* Defina estilos para o tema escuro */
+  @apply bg-black text-white;
+}
