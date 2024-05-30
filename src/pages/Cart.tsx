@@ -32,6 +32,10 @@ const Cart: React.FC = () => {
     dispatch({ type: 'UPDATE_QUANTITY', product, quantity: newQuantity });
   };
 
+  const getTotalPrice = (item: CartItem) => {
+    return (item.quantity * item.product.price).toFixed(2);
+  };
+
   const groupedItems = state.items.reduce((acc: { [key: number]: CartItem }, item: CartItem) => {
     if (!acc[item.product.id]) {
       acc[item.product.id] = { ...item };
@@ -40,8 +44,6 @@ const Cart: React.FC = () => {
     }
     return acc;
   }, {});
-
-  // const textColor = theme === 'light' ? 'text-gray-800' : 'text-gray-200';
 
   const bgColor = theme === 'light' ? 'bg-white' : 'bg-gray-900';
   const textColor = theme === 'light' ? 'text-gray-800' : 'text-white';
@@ -63,7 +65,6 @@ const Cart: React.FC = () => {
                   <div>
                     <h2 className={`text-lg font-semibold ${textColor}`}>{item.product.name}</h2>
                     <p className={textColor}>Quantidade: 
-
                       <input
                         type="number"
                         value={editedQuantities[item.product.id] || item.quantity}
@@ -77,7 +78,8 @@ const Cart: React.FC = () => {
                         className={`w-16 ml-2 text-center border-2 ${borderColor} rounded-lg ${bgColor} ${textColor} ${placeholderColor} focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out`}
                       />
                     </p>
-                    <p className={textColor}>R$ {item.product.price.toFixed(2)}</p>
+                    <p className={textColor}>Valor Unitário: R$ {item.product.price.toFixed(2)}</p>
+                    <p className={textColor}>Valor Total: R$ {getTotalPrice(item)}</p>
                   </div>
                 </div>
                 <button onClick={() => removeFromCart(item.product)} className={`bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 hover:text-white`}>

@@ -21,6 +21,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { theme } = useTheme();
   const [quantity, setQuantity] = useState(1);
 
+  const calculateTotal = () => {
+    return (quantity * product.price).toFixed(2);
+  };
+
   const addToCart = (product: Product) => {
     dispatch({ type: 'ADD_TO_CART', product, quantity });
     toast.success(`Produto adicionado ao carrinho!`);

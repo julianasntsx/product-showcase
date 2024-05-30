@@ -25,7 +25,7 @@ const ProductDetail: React.FC = () => {
 
   const addToCart = (product: Product, quantity: number) => {
     dispatch({ type: 'ADD_TO_CART', product, quantity });
-    toast.success(`${quantity}x ${product.name} adicionado ao carrinho!`);
+    toast.success(`Produto adicionado ao carrinho!`);
   };
 
   
