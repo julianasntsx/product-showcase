@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
+import { toast } from 'react-toastify';
 
 interface Product {
   id: number;
@@ -22,6 +23,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   const addToCart = (product: Product) => {
     dispatch({ type: 'ADD_TO_CART', product, quantity });
+    toast.success(`Produto adicionado ao carrinho!`);
   };
 
   const bgColor = theme === 'light' ? 'bg-white' : 'bg-gray-900';
@@ -46,7 +48,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             min="1"
             onChange={(e) => setQuantity(parseInt(e.target.value))}
             className={`w-16 text-center border-2 ${borderColor} rounded-lg ${bgColor} ${textColor} ${placeholderColor} focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out`}
-            placeholder="Qtd"
           />
         </div>
         <div className="flex justify-between items-center">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-
+import { FaTrash } from "react-icons/fa";
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
 
@@ -41,7 +41,12 @@ const Cart: React.FC = () => {
     return acc;
   }, {});
 
-  const textColor = theme === 'light' ? 'text-gray-800' : 'text-gray-200';
+  // const textColor = theme === 'light' ? 'text-gray-800' : 'text-gray-200';
+
+  const bgColor = theme === 'light' ? 'bg-white' : 'bg-gray-900';
+  const textColor = theme === 'light' ? 'text-gray-800' : 'text-white';
+  const borderColor = theme === 'light' ? 'border-gray-300' : 'border-gray-700';
+  const placeholderColor = theme === 'light' ? 'placeholder-gray-500' : 'placeholder-gray-400';
 
   return (
     <div className={`min-h-screen ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'}`}>
@@ -58,8 +63,9 @@ const Cart: React.FC = () => {
                   <div>
                     <h2 className={`text-lg font-semibold ${textColor}`}>{item.product.name}</h2>
                     <p className={textColor}>Quantidade: 
-                      <input 
-                        type="number" 
+
+                      <input
+                        type="number"
                         value={editedQuantities[item.product.id] || item.quantity}
                         onChange={(e) => setEditedQuantities({ ...editedQuantities, [item.product.id]: parseInt(e.target.value) })}
                         onBlur={() => {
@@ -67,14 +73,15 @@ const Cart: React.FC = () => {
                           setEditedQuantities({ ...editedQuantities, [item.product.id]: newQuantity });
                           updateQuantity(item.product, newQuantity);
                         }}
-                        className="ml-2 p-1 border border-gray-400 rounded-md"
+                        min="1"                      
+                        className={`w-16 ml-2 text-center border-2 ${borderColor} rounded-lg ${bgColor} ${textColor} ${placeholderColor} focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out`}
                       />
                     </p>
                     <p className={textColor}>R$ {item.product.price.toFixed(2)}</p>
                   </div>
                 </div>
                 <button onClick={() => removeFromCart(item.product)} className={`bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 hover:text-white`}>
-                  Remover
+                  <FaTrash />
                 </button>
               </li>
             ))}

@@ -14,7 +14,7 @@ root.render(
   <React.StrictMode>
     <CartProvider>
       <App />
-      <ToastContainer />
+      <ToastContainer position="bottom-left" />
     </CartProvider>
   </React.StrictMode>
 );

@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-image-magnify": "^2.7.4",
     "tailwindcss": "^3.4.3"
   }
 }
