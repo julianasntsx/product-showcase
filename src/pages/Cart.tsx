@@ -21,11 +21,11 @@ const Cart: React.FC = () => {
   const { state, dispatch } = useCart();
   const { theme } = useTheme();
 
-  const [editedQuantity, setEditedQuantity] = useState<number>(0);
+  const [editedQuantities, setEditedQuantities] = useState<{ [key: number]: number }>({});
 
   const removeFromCart = (product: Product) => {
     dispatch({ type: 'REMOVE_FROM_CART', product });
-    toast.info(`Todos os itens de ${product.name} foram removidos do carrinho!`);
+    toast.info(`Produto removido do carrinho!`);
   };
 
   const updateQuantity = (product: Product, newQuantity: number) => {
@@ -60,16 +60,22 @@ const Cart: React.FC = () => {
                     <p className={textColor}>Quantidade: 
                       <input 
                         type="number" 
-                        value={editedQuantity}
-                        onChange={(e) => setEditedQuantity(parseInt(e.target.value))}
-                        onBlur={() => updateQuantity(item.product, editedQuantity)}
+                        value={editedQuantities[item.product.id] || item.quantity}
+                        onChange={(e) => setEditedQuantities({ ...editedQuantities, [item.product.id]: parseInt(e.target.value) })}
+                        onBlur={() => {
+                          const newQuantity = editedQuantities[item.product.id] || item.quantity;
+                          setEditedQuantities({ ...editedQuantities, [item.product.id]: newQuantity });
+                          updateQuantity(item.product, newQuantity);
+                        }}
                         className="ml-2 p-1 border border-gray-400 rounded-md"
                       />
                     </p>
                     <p className={textColor}>R$ {item.product.price.toFixed(2)}</p>
                   </div>
                 </div>
-                <button onClick={() => removeFromCart(item.product)} className={`bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 ${theme === 'light' ? 'hover:text-white' : 'hover:text-gray-900'}`}>Remover Todos</button>
+                <button onClick={() => removeFromCart(item.product)} className={`bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 hover:text-white`}>
+                  Remover
+                </button>
               </li>
             ))}
           </ul>

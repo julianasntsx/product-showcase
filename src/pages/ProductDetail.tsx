@@ -9,6 +9,7 @@ interface Product {
   id: number;
   name: string;
   description: string;
+  detailedDescription: string;
   price: number;
   image: string;
 }
@@ -27,6 +28,7 @@ const ProductDetail: React.FC = () => {
     toast.success(`${quantity}x ${product.name} adicionado ao carrinho!`);
   };
 
+  
   const textColor = theme === 'light' ? 'text-gray-800' : 'text-gray-200';
   const buttonColor = theme === 'light' ? 'bg-green-500 hover:bg-green-600' : 'bg-green-700 hover:bg-green-800';
 
@@ -39,7 +41,7 @@ const ProductDetail: React.FC = () => {
           </div>
           <div className={textColor}>
             <h1 className={`text-3xl font-bold mb-4 ${textColor}`}>{product.name}</h1>
-            <p className={`text-lg mb-4 ${textColor}`}>{product.description}</p>
+            <p className={`text-lg mb-4 ${textColor}`}>{product.detailedDescription}</p>
             <p className={`text-xl font-semibold mb-4 ${textColor}`}>R$ {product.price.toFixed(2)}</p>
             <div className="flex items-center mb-4">
               <label htmlFor="quantity" className="mr-4">Quantidade:</label>
@@ -49,7 +51,7 @@ const ProductDetail: React.FC = () => {
                 value={quantity}
                 onChange={(e) => setQuantity(Number(e.target.value))}
                 min="1"
-                className="w-16 p-2 border border-gray-300 rounded"
+                className="w-16 p-2 border border-gray-300 rounded bg-red"
               />
             </div>
             <button
