@@ -10,7 +10,7 @@ export const products = [
     id: 2,
     name: "Produto 2",
     description: "Descrição do Produto 2",
-    price: 49.99,
+    price: 59.99,
     image: "https://images.pexels.com/photos/2536965/pexels-photo-2536965.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   },
   {
@@ -77,9 +77,9 @@ export const products = [
     image: "https://images.pexels.com/photos/2536965/pexels-photo-2536965.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   },
   {
-    id: 3,
+    id: 4,
     name: "Produto 4",
-    description: "Descrição do Produto 3",
+    description: "Descrição do Produto 4",
     price: 49.99,
     image: "https://images.pexels.com/photos/2536965/pexels-photo-2536965.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   },

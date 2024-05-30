@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
 
@@ -10,19 +12,32 @@ interface Product {
   image: string;
 }
 
+interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
 const Cart: React.FC = () => {
   const { state, dispatch } = useCart();
   const { theme } = useTheme();
 
+  const [editedQuantity, setEditedQuantity] = useState<number>(0);
+
   const removeFromCart = (product: Product) => {
     dispatch({ type: 'REMOVE_FROM_CART', product });
+    toast.info(`Todos os itens de ${product.name} foram removidos do carrinho!`);
   };
 
-  const groupedItems = state.items.reduce((acc: { [key: number]: any }, item: Product) => {
-    if (!acc[item.id]) {
-      acc[item.id] = { ...item, quantity: 0 };
+  const updateQuantity = (product: Product, newQuantity: number) => {
+    dispatch({ type: 'UPDATE_QUANTITY', product, quantity: newQuantity });
+  };
+
+  const groupedItems = state.items.reduce((acc: { [key: number]: CartItem }, item: CartItem) => {
+    if (!acc[item.product.id]) {
+      acc[item.product.id] = { ...item };
+    } else {
+      acc[item.product.id].quantity += item.quantity;
     }
-    acc[item.id].quantity += 1;
     return acc;
   }, {});
 
@@ -35,18 +50,26 @@ const Cart: React.FC = () => {
         {state.items.length === 0 ? (
           <p className={`text-lg ${textColor}`}>Seu carrinho está vazio</p>
         ) : (
-          <ul className="divide-y divide-gray-200 bg-red">
-            {Object.values(groupedItems).map((item: Product & { quantity: number }) => (
-              <li key={item.id} className="flex justify-between items-center py-4">
+          <ul className="divide-y divide-gray-200">
+            {Object.values(groupedItems).map((item: CartItem) => (
+              <li key={item.product.id} className="flex justify-between items-center py-4">
                 <div className="flex items-center">
-                  <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-lg mr-4" />
+                  <img src={item.product.image} alt={item.product.name} className="w-16 h-16 object-cover rounded-lg mr-4" />
                   <div>
-                    <h2 className={`text-lg font-semibold ${textColor}`}>{item.name}</h2>
-                    <p className={textColor}>Quantidade: {item.quantity}</p>
-                    <p className={textColor}>R$ {item.price.toFixed(2)}</p>
+                    <h2 className={`text-lg font-semibold ${textColor}`}>{item.product.name}</h2>
+                    <p className={textColor}>Quantidade: 
+                      <input 
+                        type="number" 
+                        value={editedQuantity}
+                        onChange={(e) => setEditedQuantity(parseInt(e.target.value))}
+                        onBlur={() => updateQuantity(item.product, editedQuantity)}
+                        className="ml-2 p-1 border border-gray-400 rounded-md"
+                      />
+                    </p>
+                    <p className={textColor}>R$ {item.product.price.toFixed(2)}</p>
                   </div>
                 </div>
-                <button onClick={() => removeFromCart(item)} className={`bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 ${theme === 'light' ? 'hover:text-white' : 'hover:text-gray-900'}`}>Remover</button>
+                <button onClick={() => removeFromCart(item.product)} className={`bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 ${theme === 'light' ? 'hover:text-white' : 'hover:text-gray-900'}`}>Remover Todos</button>
               </li>
             ))}
           </ul>
