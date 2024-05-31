@@ -13,44 +13,48 @@ const ProductList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
   const { theme } = useTheme();
+  const [filteredProducts, setFilteredProducts] = useState(products); 
 
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    product.price >= priceRange[0] && product.price <= priceRange[1]
-  );
-
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-
-  useEffect(() => {
-    if (filteredProducts.length === 0 && (searchTerm || priceRange[0] !== 0 || priceRange[1] !== Infinity)) {
+  useEffect(() => {    
+    const filterProducts = () => {
+      return products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        product.price >= priceRange[0] && product.price <= priceRange[1]
+      );
+    };
+  setFilteredProducts(filterProducts()); 
+  }, [searchTerm, priceRange]);
+  
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+  setCurrentPage(1); 
+  };
+  
+  const handleFilter = (range: [number, number]) => {
+    if (range[0] === 0 && range[1] === Infinity) {      
       toast.error('Nenhum resultado encontrado. Redefinindo filtros.');
       setSearchTerm('');
       setPriceRange([0, Infinity]);
+    } else {
+      setPriceRange(range);
+    setCurrentPage(1); 
     }
-  }, [filteredProducts.length, searchTerm, priceRange]);
-
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-    setCurrentPage(1); // Reset to the first page on new search
   };
-
-  const handleFilter = (range: [number, number]) => {
-    setPriceRange(range);
-    setCurrentPage(1); // Reset to the first page on new filter
-  };
-
+  
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
   return (
     <div className={`min-h-screen ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'} py-8 px-4`}>
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between mb-4">
-          <div className="w-4/5 mx-4"> {/* 80% width with 1rem margin on each side */}
+          <div className="w-4/6 mx-4">
             <SearchBar setSearchTerm={handleSearch} />
           </div>
-          <div className="w-1/5"> {/* 20% width */}
+          <div className="w-2/6"> 
             <PriceFilter setPriceRange={handleFilter} />
           </div>
         </div>

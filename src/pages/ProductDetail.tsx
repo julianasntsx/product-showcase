@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { products } from '../mockData';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
+import QuantitySelector from '../components/QuantitySelector';
 
 interface Product {
   id: number;
@@ -28,16 +29,9 @@ const ProductDetail: React.FC = () => {
     toast.success(`Produto adicionado ao carrinho!`);
   };
 
-  
   const textColor = theme === 'light' ? 'text-gray-800' : 'text-gray-200';
   const buttonColor = theme === 'light' ? 'bg-green-500 hover:bg-green-600' : 'bg-green-700 hover:bg-green-800';
-
-  
   const bgColor = theme === 'light' ? 'bg-white' : 'bg-gray-900';
-  const secondaryTextColor = theme === 'light' ? 'text-gray-600' : 'text-gray-400';
-  const borderColor = theme === 'light' ? 'border-gray-300' : 'border-gray-700';
-  const placeholderColor = theme === 'light' ? 'placeholder-gray-500' : 'placeholder-gray-400';
-
 
   return (
     <div className={`min-h-screen ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'}`}>
@@ -52,14 +46,7 @@ const ProductDetail: React.FC = () => {
             <p className={`text-xl font-semibold mb-4 ${textColor}`}>R$ {product.price.toFixed(2)}</p>
             <div className="flex items-center mb-4">
               <label htmlFor="quantity" className="mr-4">Quantidade:</label>
-              <input
-                type="number"
-                id="quantity"
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
-                min="1"
-                className={`w-16 text-center border-2 ${borderColor} rounded-lg ${bgColor} ${textColor} ${placeholderColor} focus:outline-none focus:ring-2 focus:ring-blue-500`}
-              />
+              <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
             </div>
             <button
               onClick={() => addToCart(product, quantity)}

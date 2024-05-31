@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
 import { toast } from 'react-toastify';
+import QuantitySelector from './QuantitySelector'; // Importa o novo componente
 
 interface Product {
   id: number;
@@ -33,8 +34,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const bgColor = theme === 'light' ? 'bg-white' : 'bg-gray-900';
   const textColor = theme === 'light' ? 'text-gray-800' : 'text-white';
   const secondaryTextColor = theme === 'light' ? 'text-gray-600' : 'text-gray-400';
-  const borderColor = theme === 'light' ? 'border-gray-300' : 'border-gray-700';
-  const placeholderColor = theme === 'light' ? 'placeholder-gray-500' : 'placeholder-gray-400';
 
   return (
     <div className={`rounded-lg overflow-hidden shadow-lg ${bgColor}`}>
@@ -46,13 +45,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <p className={`mb-4 ${secondaryTextColor}`}>{product.description}</p>
         <div className="flex justify-between items-center mb-4">
           <p className={`font-semibold text-lg ${textColor}`}>R$ {product.price.toFixed(2)}</p>
-          <input
-            type="number"
-            value={quantity}
-            min="1"
-            onChange={(e) => setQuantity(parseInt(e.target.value))}
-            className={`w-16 text-center border-2 ${borderColor} rounded-lg ${bgColor} ${textColor} ${placeholderColor} focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out`}
-          />
+          <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
         </div>
         <div className="flex justify-between items-center">
           <button 

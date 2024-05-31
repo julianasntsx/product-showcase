@@ -10,7 +10,9 @@ import { FaShoppingCart } from "react-icons/fa";
 const Header: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { state } = useCart();
-  const cartItemCount = state.items.reduce((acc, item) => acc + item.quantity, 0);
+  
+  // Alteração aqui para contar produtos únicos
+  const cartItemCount = state.items.length;
 
   const textColor = theme === 'light' ? 'text-white' : 'text-white';
   const bgColor = theme === 'light' ? 'bg-blue-600' : 'bg-gray-900';

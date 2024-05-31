@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { FaTrash } from "react-icons/fa";
+import { FaTrash } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
+import ConfirmModal from '../components/ConfirmModal'; // Importe o modal
+import QuantitySelector from '../components/QuantitySelector'; // Importe o componente QuantitySelector
 
 interface Product {
   id: number;
@@ -22,10 +24,25 @@ const Cart: React.FC = () => {
   const { theme } = useTheme();
 
   const [editedQuantities, setEditedQuantities] = useState<{ [key: number]: number }>({});
+  const [modalOpen, setModalOpen] = useState(false);
+  const [productToRemove, setProductToRemove] = useState<Product | null>(null);
 
-  const removeFromCart = (product: Product) => {
-    dispatch({ type: 'REMOVE_FROM_CART', product });
-    toast.info(`Produto removido do carrinho!`);
+  const openModal = (product: Product) => {
+    setProductToRemove(product);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setProductToRemove(null);
+    setModalOpen(false);
+  };
+
+  const confirmRemove = () => {
+    if (productToRemove) {
+      dispatch({ type: 'REMOVE_FROM_CART', product: productToRemove });
+      toast.info('Produto removido do carrinho!');
+      closeModal();
+    }
   };
 
   const updateQuantity = (product: Product, newQuantity: number) => {
@@ -64,25 +81,21 @@ const Cart: React.FC = () => {
                   <img src={item.product.image} alt={item.product.name} className="w-16 h-16 object-cover rounded-lg mr-4" />
                   <div>
                     <h2 className={`text-lg font-semibold ${textColor}`}>{item.product.name}</h2>
-                    <p className={textColor}>Quantidade: 
-                      <input
-                        type="number"
-                        value={editedQuantities[item.product.id] || item.quantity}
-                        onChange={(e) => setEditedQuantities({ ...editedQuantities, [item.product.id]: parseInt(e.target.value) })}
-                        onBlur={() => {
-                          const newQuantity = editedQuantities[item.product.id] || item.quantity;
+                    <div className={`flex items-center ${textColor}`}>                      
+                      <p className={`mr-2 ${textColor}`}>Quantidade:</p>
+                      <QuantitySelector
+                        quantity={editedQuantities[item.product.id] || item.quantity}
+                        setQuantity={(newQuantity) => {
                           setEditedQuantities({ ...editedQuantities, [item.product.id]: newQuantity });
                           updateQuantity(item.product, newQuantity);
                         }}
-                        min="1"                      
-                        className={`w-16 ml-2 text-center border-2 ${borderColor} rounded-lg ${bgColor} ${textColor} ${placeholderColor} focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out`}
                       />
-                    </p>
+                    </div>
                     <p className={textColor}>Valor Unitário: R$ {item.product.price.toFixed(2)}</p>
                     <p className={textColor}>Valor Total: R$ {getTotalPrice(item)}</p>
                   </div>
                 </div>
-                <button onClick={() => removeFromCart(item.product)} className={`bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 hover:text-white`}>
+                <button onClick={() => openModal(item.product)} className={`bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 hover:text-white`}>
                   <FaTrash />
                 </button>
               </li>
@@ -90,6 +103,12 @@ const Cart: React.FC = () => {
           </ul>
         )}
       </div>
+      <ConfirmModal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        onConfirm={confirmRemove}
+        message="Tem certeza que deseja remover este produto do carrinho?"
+      />
     </div>
   );
 };

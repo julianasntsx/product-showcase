@@ -17,8 +17,9 @@ const PriceFilter: React.FC<PriceFilterProps> = ({ setPriceRange }) => {
     <div className="relative">
       <select
         onChange={handleSelectChange}
-        className={`w-full h-10 px-2 sm:px-5 pr-10 border-2 ${theme === 'light' ? 'border-gray-300' : 'border-gray-600'} focus:outline-none focus:border-blue-500`}
+        className={`w-full h-10 px-2 sm:px-2 pr-0 border-2 ${theme === 'light' ? 'border-gray-300' : 'border-gray-600'} text-gray-400 focus:outline-none focus:border-blue-500`}
       >
+        <option value="[0,99999]">Filtrar</option>
         <option value="[0,50]">R$ 0 - R$ 50</option>
         <option value="[51,100]">R$ 51 - R$ 100</option>
         <option value="[101,200]">R$ 101 - R$ 200</option>
