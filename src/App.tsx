@@ -1,13 +1,12 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import ProductList from './pages/ProductList';
-import ProductDetail from './pages/ProductDetail';
-import Cart from './pages/Cart';
-import NotFound from './pages/NotFound'; // Importe a página NotFound
+import ProductList from "./pages/ProductList";
+import ProductDetail from "./pages/ProductDetail";
+import Cart from "./pages/Cart";
+import NotFound from "./pages/NotFound";
 
-import Header from './components/Header';
-import { ThemeProvider } from './context/ThemeContext';
+import Header from "./components/Header";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function App() {
   return (

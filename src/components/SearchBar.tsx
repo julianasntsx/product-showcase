@@ -1,5 +1,5 @@
-import React from 'react';
-import { FaSearch } from 'react-icons/fa';
+import React from "react";
+import { FaSearch } from "react-icons/fa";
 
 interface SearchBarProps {
   setSearchTerm: (term: string) => void;

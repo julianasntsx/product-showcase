@@ -1,5 +1,5 @@
-import React from 'react';
-import { useTheme } from '../context/ThemeContext';
+import React from "react";
+import { useTheme } from "../context/ThemeContext";
 
 interface PriceFilterProps {
   setPriceRange: (range: [number, number]) => void;
@@ -17,7 +17,9 @@ const PriceFilter: React.FC<PriceFilterProps> = ({ setPriceRange }) => {
     <div className="relative">
       <select
         onChange={handleSelectChange}
-        className={`w-full h-10 px-2 sm:px-2 pr-0 border-2 ${theme === 'light' ? 'border-gray-300' : 'border-gray-600'} text-gray-400 focus:outline-none focus:border-blue-500`}
+        className={`w-full h-10 px-2 sm:px-2 pr-0 border-2 ${
+          theme === "light" ? "border-gray-300" : "border-gray-600"
+        } text-gray-400 focus:outline-none focus:border-blue-500`}
       >
         <option value="[0,99999]">Filtrar</option>
         <option value="[0,50]">R$ 0 - R$ 50</option>

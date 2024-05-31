@@ -1,12 +1,11 @@
-import React, { createContext, useContext, useReducer, useEffect, ReactNode, Dispatch } from 'react';
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-}
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  ReactNode,
+  Dispatch,
+} from "react";
+import { Product } from "../types/interfaces";
 
 interface CartItem {
   product: Product;
@@ -30,26 +29,31 @@ const initialState: CartState = {
 
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
-    case 'ADD_TO_CART':
+    case "ADD_TO_CART":
       return {
         ...state,
-        items: [...state.items, { product: action.product!, quantity: action.quantity! }],
+        items: [
+          ...state.items,
+          { product: action.product!, quantity: action.quantity! },
+        ],
       };
-    case 'REMOVE_FROM_CART':
+    case "REMOVE_FROM_CART":
       return {
         ...state,
-        items: state.items.filter(item => item.product.id !== action.product!.id),
+        items: state.items.filter(
+          (item) => item.product.id !== action.product!.id
+        ),
       };
-    case 'UPDATE_QUANTITY':
+    case "UPDATE_QUANTITY":
       return {
         ...state,
-        items: state.items.map(item =>
+        items: state.items.map((item) =>
           item.product.id === action.product!.id
             ? { ...item, quantity: action.quantity! }
             : item
         ),
       };
-    case 'LOAD_CART':
+    case "LOAD_CART":
       return {
         ...state,
         items: action.items!,
@@ -66,19 +70,10 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const CartProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
-
-  useEffect(() => {
-    const storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-      dispatch({ type: 'LOAD_CART', items: JSON.parse(storedCart) });
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(state.items));
-  }, [state.items]);
 
   return (
     <CartContext.Provider value={{ state, dispatch }}>
@@ -90,7 +85,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 export const useCart = (): CartContextType => {
   const context = useContext(CartContext);
   if (!context) {
-    throw new Error('useCart must be used within a CartProvider');
+    throw new Error("useCart must be used within a CartProvider");
   }
   return context;
 };

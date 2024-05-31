@@ -1,11 +1,14 @@
-import React from 'react';
+import React from "react";
 
 interface QuantitySelectorProps {
   quantity: number;
   setQuantity: (quantity: number) => void;
 }
 
-const QuantitySelector: React.FC<QuantitySelectorProps> = ({ quantity, setQuantity }) => {
+const QuantitySelector: React.FC<QuantitySelectorProps> = ({
+  quantity,
+  setQuantity,
+}) => {
   const handleIncrement = () => {
     setQuantity(quantity + 1);
   };
@@ -29,7 +32,7 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({ quantity, setQuanti
         value={quantity}
         readOnly
         className="w-16 text-center border-2 border-gray-300 rounded-none bg-white text-gray-800 placeholder-gray-500 focus:outline-none"
-        style={{ appearance: 'textfield' }} // Remove as setas do input
+        style={{ appearance: "textfield" }}
       />
       <button
         onClick={handleIncrement}
